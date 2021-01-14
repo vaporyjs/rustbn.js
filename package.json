@@ -1,5 +1,6 @@
 {
-  "name": "rustbn.js",
+  "name": "@vaporyjs/rustbn.js",
+  "namespace": "vaporyjs",
   "version": "0.1.2",
   "description": "Javascript bindings for https://github.com/paritytech/bn (using asm.js)",
   "main": "index.js",
@@ -8,10 +9,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ethereumjs/rustbn.js.git"
+    "url": "git+https://github.com/vaporyjs/rustbn.js.git"
   },
   "keywords": [
-    "ethereum",
+    "vapory",
     "ecc",
     "bn128",
     "pairing"
@@ -25,9 +26,9 @@
   ],
   "license": "(MIT OR Apache-2.0)",
   "bugs": {
-    "url": "https://github.com/ethereumjs/rustbn.js/issues"
+    "url": "https://github.com/vaporyjs/rustbn.js/issues"
   },
-  "homepage": "https://github.com/ethereumjs/rustbn.js#readme",
+  "homepage": "https://github.com/vaporyjs/rustbn.js#readme",
   "devDependencies": {
     "tape": "^4.8.0"
   }

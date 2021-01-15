@@ -63,25 +63,25 @@ pub fn ec_mul(input_hex_ptr: *const c_char) -> *const c_char {
         let p1;
         match read_point(&mut padded_input) {
             Ok(p)  => { p1 = p; },
-            Err(_) => { return b"" as *const c_char }
+            Err(_) => { return b"".as_ptr() as *const c_char }
         }
     
         let fr;
         match read_fr(&mut padded_input) {
             Ok(f)  => { fr = f; },
-            Err(_) => { return b"" as *const c_char }
+            Err(_) => { return b"".as_ptr() as *const c_char }
         }
     
         let mut ecmul_output_buf = [0u8; 64];
         if let Some(sum) = AffineG1::from_jacobian(p1 * fr) {
             // point not at infinity
 	    sum.x().to_big_endian(&mut ecmul_output_buf[0..32]).expect("Cannot fail since 0..32 is 32-byte length");
-	    sum.y().to_big_endian(&mut ecmul_output_buf[32..64]).expect("Cannot fail since 32..64 is 32-byte length");;
+	    sum.y().to_big_endian(&mut ecmul_output_buf[32..64]).expect("Cannot fail since 32..64 is 32-byte length");
 	}
     
         let mut ec_mul_output_str = ecmul_output_buf.to_hex();
         ec_mul_output_str.push_str("\0");
-        return ec_mul_output_str.as_ptr()
+        return ec_mul_output_str.as_ptr() as *const c_char
 }
 
 
@@ -110,7 +110,7 @@ pub fn ec_add(input_hex_ptr: *const c_char) -> *const c_char {
             Ok(p) => {
                 p1 = p;
             },
-            Err(_) => { return b"" as *const c_char }
+            Err(_) => { return b"".as_ptr() as *const c_char }
         }
 
         match read_point(&mut point2_padded) {
@@ -119,13 +119,13 @@ pub fn ec_add(input_hex_ptr: *const c_char) -> *const c_char {
                 let mut ecadd_output_buf = [0u8; 64];
                 if let Some(sum) = AffineG1:: from_jacobian(p1 + p2) {
                     sum.x().to_big_endian(&mut ecadd_output_buf[0..32]).expect("Cannot fail since 0..32 is 32-byte length");
-	            sum.y().to_big_endian(&mut ecadd_output_buf[32..64]).expect("Cannot fail since 32..64 is 32-byte length");;
+	                sum.y().to_big_endian(&mut ecadd_output_buf[32..64]).expect("Cannot fail since 32..64 is 32-byte length");
                 }
                 let mut ec_add_output_str = ecadd_output_buf.to_hex();
                 ec_add_output_str.push_str("\0");
-                return ec_add_output_str.as_ptr()                
+                return ec_add_output_str.as_ptr() as *const c_char
             },
-            Err(_) => { return b"" as *const c_char }
+            Err(_) => { return b"".as_ptr() as *const c_char }
         }
 
 }
@@ -142,7 +142,7 @@ pub fn ec_pairing(input_hex_ptr: *const c_char) -> *const c_char {
 	let elements = input.len() / 192;
 
         if input.len() % 192 != 0 {
-                return b"" as *const c_char;
+                return b"".as_ptr() as *const c_char;
 	}
 
 	let ret_val = if input.len() == 0 {
@@ -154,37 +154,37 @@ pub fn ec_pairing(input_hex_ptr: *const c_char) -> *const c_char {
                         let x_1;
                         match Fq::from_slice(&input[idx*192..idx*192+32]) {
                             Ok(fq) => { x_1 = fq },
-                            Err(_) => { return b"" as *const c_char }
+                            Err(_) => { return b"".as_ptr() as *const c_char }
                         }
 
                         let y_1;
                         match Fq::from_slice(&input[idx*192+32..idx*192+64]) {
                             Ok(fq) => { y_1 = fq },
-                            Err(_) => { return b"" as *const c_char }
+                            Err(_) => { return b"".as_ptr() as *const c_char }
                         }
 
                         let x2_i;
                         match Fq::from_slice(&input[idx*192+64..idx*192+96]) {
                             Ok(fq) => { x2_i = fq },
-                            Err(_) => { return b"" as *const c_char }
+                            Err(_) => { return b"".as_ptr() as *const c_char }
                         }
 
                         let x2_r;
                         match Fq::from_slice(&input[idx*192+96..idx*192+128]) {
                             Ok(fq) => { x2_r = fq },
-                            Err(_) => { return b"" as *const c_char }
+                            Err(_) => { return b"".as_ptr() as *const c_char }
                         }
 
                         let y2_i;
                         match Fq::from_slice(&input[idx*192+128..idx*192+160]) {
                             Ok(fq) => { y2_i = fq },
-                            Err(_) => { return b"" as *const c_char }
+                            Err(_) => { return b"".as_ptr() as *const c_char }
                         }
 
                         let y2_r;
                         match Fq::from_slice(&input[idx*192+160..idx*192+192]) {
                             Ok(fq) => { y2_r = fq },
-                            Err(_) => { return b"" as *const c_char }
+                            Err(_) => { return b"".as_ptr() as *const c_char }
                         }
 
 			//println!("creating g1_point with x1 and y1...");
@@ -199,7 +199,7 @@ pub fn ec_pairing(input_hex_ptr: *const c_char) -> *const c_char {
                                        let g1_affine_point = ap;
                                        g1_point = G1::from(g1_affine_point);
                                    },
-                                   Err(_) => { return b"" as *const c_char }
+                                   Err(_) => { return b"".as_ptr() as *const c_char }
                                }
 			}
 
@@ -224,7 +224,7 @@ pub fn ec_pairing(input_hex_ptr: *const c_char) -> *const c_char {
                                     let g2_affine_point = ap;
                                     g2_point = G2::from(g2_affine_point);
                                 },
-                                Err(_) => { return b"" as *const c_char}
+                                Err(_) => { return b"".as_ptr() as *const c_char}
                             }
 			}
 
@@ -245,7 +245,7 @@ pub fn ec_pairing(input_hex_ptr: *const c_char) -> *const c_char {
 	//println!("ec_pairing_output_str: {:?}", ec_pairing_output_str);
 
 	ec_pairing_output_str.push_str("\0");
-	return ec_pairing_output_str.as_ptr()
+	return ec_pairing_output_str.as_ptr() as *const c_char
 }
 
 
